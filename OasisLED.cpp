@@ -1,6 +1,6 @@
-/****************************************************************** 
- LED Driver implementation for Oasis TOFD-5465GGH-B 4-Digit LED 
- displays.  The display is based upon the PTC PT6961 LED driver IC. 
+/******************************************************************
+ LED Driver implementation for Oasis TOFD-5465GGH-B 4-Digit LED
+ displays.  The display is based upon the PTC PT6961 LED driver IC.
  Since the driver was built based upon the IC datasheet, it should
  be applicable to any other displays based upon the PT6961.
 
@@ -13,7 +13,6 @@
 
 #include "OasisLED.h"
 #include <Arduino.h>
-#include <avr/pgmspace.h>
 
 OasisLED::OasisLED(uint8_t clockPin, uint8_t strobePin, uint8_t dataPin, uint8_t digitCount, uint8_t displayLayout) {
   _clock = clockPin;
@@ -51,7 +50,7 @@ void OasisLED::redraw() {
     } else {
       shiftOut(_data, _clock, LSBFIRST, _digits[i]);
     }
-  } 
+  }
   digitalWrite(_strobe, HIGH);
 }
 
@@ -83,7 +82,7 @@ void OasisLED::setColon(bool state) {
 
 void OasisLED::setDigitSegments(uint8_t digit, uint8_t elements) {
   if (digit < _digitCount) {
-    _digits[digit] =  elements; 
+    _digits[digit] =  elements;
   }
 }
 
@@ -95,7 +94,7 @@ void OasisLED::_sendCommand(uint8_t cmd) {
 
 void OasisLED::setDigit(uint8_t digit, uint8_t value, bool redraw) {
   if (digit < _digitCount) {
-    _digits[digit] =  getDisplayBits(value & 0x0F); 
+    _digits[digit] =  getDisplayBits(value & 0x0F);
   }
   if (redraw) {
     this->redraw();
@@ -133,7 +132,7 @@ void OasisLED::setValue(uint16_t value, bool showLeadingZeroes) {
     } else {
       setDigitSegments(_digitCount - digit - 1, 0x00);
     }
-    digit++; 
+    digit++;
   }
   redraw();
 }
@@ -145,7 +144,7 @@ void OasisLED::spin() {
       _spinPos = 0;
     }
     switch (_spinMode) {
-      case SPIN_DIGIT:      
+      case SPIN_DIGIT:
         setDigitSegments(0, 1 << _spinPos);
         break;
       case SPIN_FULL:
